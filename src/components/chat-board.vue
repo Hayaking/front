@@ -9,17 +9,18 @@
             <div id="chatBoard" class="board" >
                 <Split v-model="split1" max="100px" min="200px" style="">
                     <div slot="left" class="board-list" >
-                        <div v-for="item in contactList" v-bind:key="item._id">
+                        <div v-for="item in contactList" v-bind:key="item._id" @click="switchContact(item.name)">
                             <ContactItem :name=item.name />
                         </div>
                     </div>
                     <div slot="right" class="board-right">
+                        <div style="padding: 10px;text-align: center;background: aliceblue;height: 40px">{{contact}}</div>
                         <Split v-model="split2" mode="vertical" max="150px">
+
                             <div slot="top" class="board-info" >
                                 <div v-for="item in infolist" >
-                                    <MessageItem :body=item.text :type=item.type></MessageItem>
+                                    <MessageItem :body=item.text :type=item.type :from=item.account />
                                 </div>
-
                             </div>
                             <div slot="bottom" class="board-edit">
                                 <Input  v-model="edit" type="textarea" :rows="4" placeholder="Enter something..."/>
@@ -45,13 +46,12 @@
         data () {
             return {
                 split1: 0.2,
-                split2: 0.72,
+                split2: 0.68,
                 contactList: null,
                 edit:null,
                 account: null ,
-                infolist:[{"token":"e2c8dbbd-2c23-4dec-a08e-082ee589a874","account":"admin","to":"admin","text":"6","type":"RECEIVED"}
-                ,{"token":"e2c8dbbd-2c23-4dec-a08e-082ee589a874","account":"admin","to":"admin","text":"6","type":"SEND"}
-                ]
+                infolist:[],
+                contact: null
             }
         },
         mounted () {
@@ -70,12 +70,16 @@
                 var jsonObject = {
                     account: window.localStorage.getItem("name"),
                     token: window.localStorage.getItem("token"),
-                    to: "admin",
+                    to: this.contact,
                     text: this.edit,
                     type: 'SEND'
                 };
                 this.infolist.push(jsonObject);
                 this.$socket.emit('sendMessage', jsonObject);
+            },
+            switchContact:function (con) {
+                this.contact = con;
+                this.infolist = [];
             }
         }
     }
@@ -94,8 +98,8 @@
     .board-info,.board-edit{
         overflow-y: auto;
         padding: 10px;
-        height:-webkit-fill-available;
-        height:-moz-fill-available;
+        /*height:-webkit-fill-available;*/
+        height:100%;
         /*height:fill-available;*/
     }
     .board-right{

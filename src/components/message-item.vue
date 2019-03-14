@@ -1,10 +1,12 @@
 <template>
-    <div v-if="type==='RECEIVED'" >
-        <Button type="success" class="RECEIVED">{{body}}</Button>
+    <div v-if="type==='RECEIVED'" class="RECEIVED">
+        <div style="display: inline;margin-right: 5px">{{from}}</div>
+        <Button type="success" >{{body}}</Button>
 
     </div>
-    <div v-else >
-        <Button type="info" class="SEND">{{body}}</Button>
+    <div v-else class="SEND">
+        <Button type="info" style="display: inline">{{body}}</Button>
+        <div style="display: inline;margin-left: 5px">{{from}}</div>
 
     </div>
 </template>
@@ -20,6 +22,10 @@
             body:{
                 type:String,
                 default: 'wtf'
+            },
+            from:{
+                type:String,
+                default: 'wtf'
             }
         }
     }
@@ -28,11 +34,12 @@
 <style scoped>
     .RECEIVED {
         float: left;
-        clear:both
     }
     .SEND {
         float: right;
-        clear:both
-
+    }
+    .SEND,.RECEIVED {
+        clear:both;
+        margin-bottom: 5px;
     }
 </style>
