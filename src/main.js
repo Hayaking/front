@@ -8,8 +8,6 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueSocketIO from 'vue-socket.io';
 import md5 from 'js-md5';
-// import socketio from 'socket.io-client';
-
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);

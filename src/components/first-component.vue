@@ -31,9 +31,15 @@
         methods: {
             logoff: function (name) {
                 if ('logoff' === name) {
+
+                    const jsonObject = {
+                        account: window.localStorage.getItem("name"),
+                        token: window.localStorage.getItem("token"),
+                    };
                     window.localStorage.removeItem("token");
                     window.localStorage.removeItem("name");
                     window.localStorage.removeItem("password");
+                    this.$socket.emit('logoffMessage', jsonObject);
                     alert('清除成功');
                     this.$router.push("/");
                 }

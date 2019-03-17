@@ -7,14 +7,14 @@
         </Breadcrumb>
         <Card :padding=0 >
             <div id="chatBoard" class="board" >
-                <Split v-model="split1" max="100px" min="200px" style="">
+                <Split v-model="split1" max="100px" min="200px" >
                     <div slot="left" class="board-list" >
-                        <div v-for="item in contactList" v-bind:key="item._id" @click="switchContact(item.name)">
+                        <div v-for="item in contactList" v-bind:key="item.name" @click="switchContact(item.name)">
                             <ContactItem :name=item.name />
                         </div>
                     </div>
                     <div slot="right" class="board-right">
-                        <div style="padding: 10px;text-align: center;background: aliceblue;height: 40px">{{contact}}</div>
+                        <div class="title">{{contact}}</div>
                         <Split v-model="split2" mode="vertical" max="150px">
 
                             <div slot="top" class="board-info" >
@@ -23,8 +23,12 @@
                                 </div>
                             </div>
                             <div slot="bottom" class="board-edit">
-                                <Input  v-model="edit" type="textarea" :rows="4" placeholder="Enter something..."/>
-                                <Button type="primary" style="float: right" @click="send()">Primary</Button>
+                                <Split v-model="split3" >
+                                    <Input  slot="left" v-model="edit"  type="textarea" :rows="4"  placeholder="Enter something..."/>
+                                    <div slot="right">
+                                        <Button type="primary" style="float: right" @click="send()">Primary</Button>
+                                    </div>
+                                </Split>
                             </div>
                         </Split>
                     </div>
@@ -47,6 +51,7 @@
             return {
                 split1: 0.2,
                 split2: 0.68,
+                split3:0.92,
                 contactList: null,
                 edit:null,
                 account: null ,
@@ -55,19 +60,26 @@
             }
         },
         mounted () {
-            axios
-                .get('http://localhost:8081/users')
+            // let obj = {
+            //     token: window.localStorage.getItem("token"),
+            //     name: window.localStorage.getItem('name')
+            // };
+            axios.get('http://localhost:8081/users', {
+                    params: {
+                        token: window.localStorage.getItem("token"),
+                        name: window.localStorage.getItem('name')
+                    }
+            })
                 .then(response => (this.contactList = response.data.users));
         },
         sockets: {
             receiveMessage:function (data) {
-                // alert(data);
                 this.infolist.push(JSON.parse(data));
             }
         },
         methods: {
             send: function () {
-                var jsonObject = {
+                const jsonObject = {
                     account: window.localStorage.getItem("name"),
                     token: window.localStorage.getItem("token"),
                     to: this.contact,
@@ -76,6 +88,7 @@
                 };
                 this.infolist.push(jsonObject);
                 this.$socket.emit('sendMessage', jsonObject);
+
             },
             switchContact:function (con) {
                 this.contact = con;
@@ -86,6 +99,12 @@
 </script>
 
 <style scoped>
+    .title {
+        padding: 10px;
+        text-align: center;
+        background: #dcdcdc;
+        height: 40px;
+    }
     .board,.board-list,.board-right{
         height: 600px;
     }
@@ -95,12 +114,16 @@
         /*height:-webkit-fill-available;*/
     }
 
-    .board-info,.board-edit{
+    .board-info{
         overflow-y: auto;
         padding: 10px;
-        /*height:-webkit-fill-available;*/
         height:100%;
-        /*height:fill-available;*/
+    }
+    .board-edit{
+        overflow-x: hidden;
+        padding: 10px;
+        height: 150px;
+
     }
     .board-right{
         padding: 0;
