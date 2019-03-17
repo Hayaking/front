@@ -9,12 +9,12 @@
             <div id="chatBoard" class="board" >
                 <Split v-model="split1" max="100px" min="200px" >
                     <div slot="left" class="board-list" >
-                        <div v-for="item in contactList" v-bind:key="item.name" @click="switchContact(item.name)">
-                            <ContactItem :name=item.name />
+                        <div v-for="item in contactList" v-bind:key="item.name" @click="switchContact(item)">
+                            <ContactItem :item=item />
                         </div>
                     </div>
                     <div slot="right" class="board-right">
-                        <div class="title">{{contact}}</div>
+                        <div class="title">{{currentContact}}</div>
                         <Split v-model="split2" mode="vertical" max="150px">
 
                             <div slot="top" class="board-info" >
@@ -54,23 +54,21 @@
                 split3:0.92,
                 contactList: null,
                 edit:null,
-                account: null ,
+                account: null,
                 infolist:[],
-                contact: null
+                currentContact: null,
+                currentContactType: null,
+                currentGroupId: null
             }
         },
         mounted () {
-            // let obj = {
-            //     token: window.localStorage.getItem("token"),
-            //     name: window.localStorage.getItem('name')
-            // };
-            axios.get('http://localhost:8081/users', {
+            axios.get('http://localhost:8081/contacts', {
                     params: {
                         token: window.localStorage.getItem("token"),
                         name: window.localStorage.getItem('name')
                     }
             })
-                .then(response => (this.contactList = response.data.users));
+                .then(response => (this.contactList = response.data.contacts));
         },
         sockets: {
             receiveMessage:function (data) {
@@ -79,19 +77,37 @@
         },
         methods: {
             send: function () {
-                const jsonObject = {
-                    account: window.localStorage.getItem("name"),
-                    token: window.localStorage.getItem("token"),
-                    to: this.contact,
-                    text: this.edit,
-                    type: 'SEND'
-                };
-                this.infolist.push(jsonObject);
-                this.$socket.emit('sendMessage', jsonObject);
+                let jsonObject;
 
+                if (this.currentContactType === 'contact') {
+                    jsonObject = {
+                        account: window.localStorage.getItem("name"),
+                        token: window.localStorage.getItem("token"),
+                        to: this.currentContact,
+                        text: this.edit,
+                        type: 'SEND'
+                    };
+                    this.$socket.emit('sendMessage', jsonObject);
+                } else if (this.currentContactType === 'group') {
+                    jsonObject = {
+                        account: window.localStorage.getItem("name"),
+                        token: window.localStorage.getItem("token"),
+                        to: this.currentGroupId,
+                        text: this.edit,
+                        type: 'SEND'
+                    };
+                    this.$socket.emit('groupMessage', jsonObject);
+                }
+                this.infolist.push(jsonObject);
             },
-            switchContact:function (con) {
-                this.contact = con;
+            switchContact:function (item) {
+                if (item.hasOwnProperty('_id')) {
+                    this.currentContactType = 'group';
+                    this.currentGroupId = item._id;
+                } else {
+                    this.currentContactType = 'contact';
+                }
+                this.currentContact = item.name;
                 this.infolist = [];
             }
         }

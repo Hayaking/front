@@ -1,8 +1,9 @@
 <template>
     <div>
-        <Card :padding=5 :bordered=false class="contact-item">
-            <Avatar shape="square" icon="ios-person" />
-            <div style="display: inline;margin-left: 10px">{{name}}</div>
+        <Card :padding=5 :bordered=false class="contact-item" >
+            <Avatar v-if="item.hasOwnProperty('_id')" shape="square" icon="ios-chatbubbles" />
+            <Avatar v-else shape="square" icon="ios-person" />
+            <div style="display: inline;margin-left: 10px">{{item.name}}</div>
         </Card>
     </div>
 </template>
@@ -11,10 +12,9 @@
     export default {
         name: "contact-item",
         props: {
-            name: {
-                type: String,
-                default: "无名"
-            },
+            item:{
+                type:Object,
+            }
         },
     }
 </script>
