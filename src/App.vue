@@ -17,7 +17,7 @@
             this.$socket.on('receiveMsg', (data) => {
                 let from_user = data.from_user;
                 //如果当前页面为与from_user的对话框，则交由对话框页面处理
-                if (this.$route.query.chatwith == from_user) {
+                if (this.$route.query.chatwith === from_user) {
                     return;
                 }
                 this.update_chatList(data);

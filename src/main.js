@@ -23,7 +23,7 @@ new Vue({
     render: h => h(App),
     sockets: {
         connect() {
-            alert('链接成功')
+            this.$Message.success('链接成功');
         },
     },
 }).$mount('#app');

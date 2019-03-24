@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import login from '../components/login'
 import _404 from '../components/404'
 import chat from '../components/chat-board'
+import search from '../components/search'
 Vue.use(Router);
 
 const router = new Router({
@@ -18,6 +19,10 @@ const router = new Router({
             path: '/login',
             name: 'login',
             component: login
+        }, {
+            path: '/search',
+            name: 'search',
+            component: search
         }, {
             path: '*',
             name: '404',

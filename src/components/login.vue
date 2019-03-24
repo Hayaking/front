@@ -39,14 +39,18 @@
                     window.localStorage.setItem('token', token);
                     window.localStorage.setItem('name', this.account);
                     window.localStorage.setItem('password', this.$md5(this.password));
+                    this.$Message.success('登录成功');
                     //router跳转到 /index
                     this.$router.push("/index");
                 } else if (obj.type === 'SIGN_SUCCESS') {
-                    alert('注册成功');
+                    this.$Message.success('注册成功');
+                    // alert('注册成功');
                 } else if (obj.type === 'SIGN_FAILED') {
-                    alert('注册失败');
+                    this.$Message.error('注册失败');
+                    // alert('');
                 } else if (obj.type === 'LOGIN_FAILED') {
-                    alert("登录失败");
+                    this.$Message.error('登录失败');
+                    // alert("登录失败");
                 }
             }
         },

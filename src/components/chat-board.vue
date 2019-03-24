@@ -67,8 +67,7 @@
                         token: window.localStorage.getItem("token"),
                         name: window.localStorage.getItem('name')
                     }
-            })
-                .then(response => (this.contactList = response.data.contacts));
+            }).then(response => (this.contactList = response.data.contacts));
         },
         sockets: {
             receiveMessage:function (data) {

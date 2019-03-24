@@ -3,7 +3,7 @@
         <Sider></Sider>
         <Layout class="layout">
             <Header :style="{background: '#fff', boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}">
-                <Input search placeholder="Enter something..." style="width:50%"/>
+                <Input search placeholder="搜索用户" style="width:50%" v-model="search" @on-search="searchContact"/>
                 <div class="demo-avatar-badge" style="float: right">
                     <Dropdown @on-click="logoff">
                         <Badge :count="1" :offset=[45,5]>
@@ -25,6 +25,7 @@
 
 <script>
     import Sider from './sider';
+    import axios from 'axios';
     export default {
         name: 'app',
         components: {Sider},
@@ -40,10 +41,31 @@
                     window.localStorage.removeItem("name");
                     window.localStorage.removeItem("password");
                     this.$socket.emit('logoffMessage', jsonObject);
-                    alert('清除成功');
+                    // alert('清除成功');
+                    this.$Message.info('清除成功');
                     this.$router.push("/");
                 }
+            },
+            searchContact:function () {
+                axios.get('http://localhost:8081/search', {
+                    params: {
+                        token: window.localStorage.getItem("token"),
+                        name: window.localStorage.getItem('name')
+                    }
+                }).then(response => (this.$router.push({
+                    path:"/search",
+                    query:{
+                        user:response.data
+                    }
+                })));
+                // axios.get('http://localhost:8081/search', {
+                //     params: {
+                //         token: window.localStorage.getItem("token"),
+                //         name: window.localStorage.getItem('name')
+                //     }
+                // }).then(response => (alert(response.data)));
             }
+
         }
     }
 </script>
