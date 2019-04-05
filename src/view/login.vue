@@ -19,10 +19,10 @@
 <script>
     export default {
         name: "login",
-        account: null,
-        password: null,
-        data:function() {
+        data(){
             return {
+                account: null,
+                password: null,
                 title: "登录",
                 sign: "注册",
                 isShow: true,//标识登录与注册的切换状态

@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-      <firstcomponent/>
+      <Main/>
   </div>
 </template>
 
 <script>
 
-    import firstcomponent from './components/first-component';
+    import Main from './view/main';
 
     export default {
         name: 'app',
-        components: {firstcomponent},
+        components: {Main},
 
         updateBySocket() {
             this.$socket.removeAllListeners();

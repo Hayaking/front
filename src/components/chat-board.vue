@@ -1,10 +1,6 @@
 <template>
     <div>
-        <Breadcrumb :style="{margin: '16px 0'}">
-            <BreadcrumbItem>Home</BreadcrumbItem>
-            <BreadcrumbItem>Components</BreadcrumbItem>
-            <BreadcrumbItem>Layout</BreadcrumbItem>
-        </Breadcrumb>
+        <BreadGroup :style="{margin: '16px 0'}" :items=bread></BreadGroup>
         <Card :padding=0 >
             <div id="chatBoard" class="board" >
                 <Split v-model="split1" max="100px" min="200px" >
@@ -18,7 +14,7 @@
                         <Split v-model="split2" mode="vertical" max="150px">
 
                             <div slot="top" class="board-info" >
-                                <div v-for="item in infolist" >
+                                <div v-for="item in infolist" v-bind:key="item.account">
                                     <MessageItem :body=item.text :type=item.type :from=item.account />
                                 </div>
                             </div>
@@ -42,10 +38,11 @@
 <script>
     import ContactItem from './contact-item';
     import MessageItem from './message-item';
+    import BreadGroup from './breadcrumbGroup';
     import axios from 'axios';
 
     export default {
-        components: {ContactItem,MessageItem},
+        components: {ContactItem,MessageItem,BreadGroup},
 
         data () {
             return {
@@ -58,7 +55,8 @@
                 infolist:[],
                 currentContact: null,
                 currentContactType: null,
-                currentGroupId: null
+                currentGroupId: null,
+                bread: ["haya", "haya"]
             }
         },
         mounted () {

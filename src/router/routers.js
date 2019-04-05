@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import login from '../components/login'
-import _404 from '../components/404'
+import login from '../view/login'
+import _404 from '../view/404'
 import chat from '../components/chat-board'
-import search from '../components/search'
+import search from '../view/search'
+import circle from '../view/circle'
 Vue.use(Router);
 
 const router = new Router({
+    mode: 'history',
     routes: [
         {
             path: '/index',
@@ -24,6 +26,10 @@ const router = new Router({
             name: 'search',
             component: search
         }, {
+            path: '/circle',
+            name: 'circle',
+            component: circle
+        },{
             path: '*',
             name: '404',
             component: _404

@@ -1,9 +1,9 @@
 <template>
     <div>
-        <Sider></Sider>
+        <Sider theme="dark"></Sider>
         <Layout class="layout">
             <Header :style="{background: '#fff', boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}">
-                <Input search placeholder="搜索用户" style="width:50%" v-model="search" @on-search="searchContact"/>
+                <Input search placeholder="搜索用户" style="width:50%"  @on-search="searchContact"/>
                 <div class="demo-avatar-badge" style="float: right">
                     <Dropdown @on-click="logoff">
                         <Badge :count="1" :offset=[45,5]>
@@ -24,8 +24,9 @@
 </template>
 
 <script>
-    import Sider from './sider';
+    import Sider from '../components/sider';
     import axios from 'axios';
+
     export default {
         name: 'app',
         components: {Sider},
