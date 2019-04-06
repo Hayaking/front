@@ -5,26 +5,24 @@
             <div id="chatBoard" class="board" >
                 <Split v-model="split1" max="100px" min="200px" >
                     <div slot="left" class="board-list" >
-                        <div v-for="item in contactList" v-bind:key="item.name" @click="switchContact(item)">
-                            <ContactItem :item=item />
-                        </div>
+                        <ContactList :items="contactList" @switchContact="switchContact"/>
                     </div>
                     <div slot="right" class="board-right">
                         <div class="title">{{currentContact}}</div>
                         <Split v-model="split2" mode="vertical" max="150px">
-
                             <div slot="top" class="board-info" >
                                 <div v-for="item in infolist" v-bind:key="item.account">
                                     <MessageItem :body=item.text :type=item.type :from=item.account />
                                 </div>
                             </div>
                             <div slot="bottom" class="board-edit">
-                                <Split v-model="split3" >
-                                    <Input  slot="left" v-model="edit"  type="textarea" :rows="4"  placeholder="Enter something..."/>
-                                    <div slot="right">
-                                        <Button type="primary" style="float: right" @click="send()">Primary</Button>
-                                    </div>
-                                </Split>
+                                <!--<Split v-model="split3" >-->
+                                    <!--<Input  slot="left" v-model="edit"  type="textarea" :rows="4"  placeholder="Enter something..."/>-->
+                                    <!--<div slot="right">-->
+                                        <!--<Button type="primary" style="float: right" @click="send()">Primary</Button>-->
+                                    <!--</div>-->
+                                <!--</Split>-->
+                                <MesageEditer @send="send"/>
                             </div>
                         </Split>
                     </div>
@@ -36,13 +34,14 @@
 </template>
 
 <script>
-    import ContactItem from './contact-item';
-    import MessageItem from './message-item';
+
+    import MessageItem from './item-message';
     import BreadGroup from './breadcrumbGroup';
     import axios from 'axios';
-
+    import ContactList from './list-contact';
+    import MesageEditer from './editer';
     export default {
-        components: {ContactItem,MessageItem,BreadGroup},
+        components: {MessageItem,BreadGroup,ContactList,MesageEditer},
 
         data () {
             return {
@@ -73,15 +72,14 @@
             }
         },
         methods: {
-            send: function () {
+            send: function (text) {
                 let jsonObject;
-
                 if (this.currentContactType === 'contact') {
                     jsonObject = {
                         account: window.localStorage.getItem("name"),
                         token: window.localStorage.getItem("token"),
                         to: this.currentContact,
-                        text: this.edit,
+                        text: text,
                         type: 'SEND'
                     };
                     this.$socket.emit('sendMessage', jsonObject);
@@ -90,21 +88,16 @@
                         account: window.localStorage.getItem("name"),
                         token: window.localStorage.getItem("token"),
                         to: this.currentGroupId,
-                        text: this.edit,
+                        text: text,
                         type: 'SEND'
                     };
                     this.$socket.emit('groupMessage', jsonObject);
                 }
+
                 this.infolist.push(jsonObject);
             },
-            switchContact:function (item) {
-                if (item.hasOwnProperty('_id')) {
-                    this.currentContactType = 'group';
-                    this.currentGroupId = item._id;
-                } else {
-                    this.currentContactType = 'contact';
-                }
-                this.currentContact = item.name;
+            switchContact:function (obj) {
+                this.currentContact = obj.name;
                 this.infolist = [];
             }
         }

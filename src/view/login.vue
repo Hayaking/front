@@ -41,6 +41,8 @@
                     window.localStorage.setItem('password', this.$md5(this.password));
                     this.$Message.success('登录成功');
                     //router跳转到 /index
+                    // this.$store.dispatch('show_sider');
+                    this.$emit('login', true);
                     this.$router.push("/index");
                 } else if (obj.type === 'SIGN_SUCCESS') {
                     this.$Message.success('注册成功');
@@ -88,8 +90,7 @@
 <style scoped>
     .board {
         text-align: center;
-        margin-top: 10%;
-        margin-bottom: 10%;
+        margin-top: 15%;
+        margin-bottom: 20%;
     }
-
 </style>

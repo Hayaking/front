@@ -7,7 +7,7 @@ import router from './router/routers.js';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueSocketIO from 'vue-socket.io';
-// import store from 'store/index';
+import store from './store/index.js';
 import md5 from 'js-md5';
 
 Vue.use(VueRouter);
@@ -21,7 +21,7 @@ Vue.use(new VueSocketIO({
 Vue.prototype.$md5 = md5;
 new Vue({
     router,
-    // store,
+    store,
     render: h => h(App),
     sockets: {
         connect() {

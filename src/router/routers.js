@@ -19,8 +19,7 @@ const router = new Router({
             name: 'home',
         }, {
             path: '/login',
-            name: 'login',
-            component: login
+            name: 'login'
         }, {
             path: '/search',
             name: 'search',
