@@ -5,24 +5,16 @@
             <div id="chatBoard" class="board" >
                 <Split v-model="split1" max="100px" min="200px" >
                     <div slot="left" class="board-list" >
-                        <ContactList :items="contactList" @switchContact="switchContact"/>
+                        <ContactList :items=contactList @switchContact="switchContact"/>
                     </div>
                     <div slot="right" class="board-right">
-                        <div class="title">{{currentContact}}</div>
+                        <div class="title">{{currentContact.name}}</div>
                         <Split v-model="split2" mode="vertical" max="150px">
                             <div slot="top" class="board-info" >
-                                <div v-for="item in infolist" v-bind:key="item.account">
-                                    <MessageItem :body=item.text :type=item.type :from=item.account />
-                                </div>
+                                <MessageList :items=messageList />
                             </div>
                             <div slot="bottom" class="board-edit">
-                                <!--<Split v-model="split3" >-->
-                                    <!--<Input  slot="left" v-model="edit"  type="textarea" :rows="4"  placeholder="Enter something..."/>-->
-                                    <!--<div slot="right">-->
-                                        <!--<Button type="primary" style="float: right" @click="send()">Primary</Button>-->
-                                    <!--</div>-->
-                                <!--</Split>-->
-                                <MesageEditer @send="send"/>
+                                <MessageEditor @sendText="send"/>
                             </div>
                         </Split>
                     </div>
@@ -34,27 +26,21 @@
 </template>
 
 <script>
-
-    import MessageItem from './item-message';
-    import BreadGroup from './breadcrumbGroup';
     import axios from 'axios';
+    import BreadGroup from './breadcrumbGroup';
     import ContactList from './list-contact';
-    import MesageEditer from './editer';
+    import MessageEditor from './editor';
+    import MessageList from './list-info';
     export default {
-        components: {MessageItem,BreadGroup,ContactList,MesageEditer},
+        components: {BreadGroup,ContactList, MessageEditor,MessageList},
 
         data () {
             return {
                 split1: 0.2,
                 split2: 0.68,
-                split3:0.92,
                 contactList: null,
-                edit:null,
-                account: null,
-                infolist:[],
-                currentContact: null,
-                currentContactType: null,
-                currentGroupId: null,
+                messageList:[],
+                currentContact: {}, // name,type,id
                 bread: ["haya", "haya"]
             }
         },
@@ -68,37 +54,36 @@
         },
         sockets: {
             receiveMessage:function (data) {
-                this.infolist.push(JSON.parse(data));
+                this.messageList.push(JSON.parse(data));
             }
         },
         methods: {
             send: function (text) {
                 let jsonObject;
-                if (this.currentContactType === 'contact') {
+                if (this.currentContact.type === 'contact') {
                     jsonObject = {
                         account: window.localStorage.getItem("name"),
                         token: window.localStorage.getItem("token"),
-                        to: this.currentContact,
+                        to: this.currentContact.name,
                         text: text,
                         type: 'SEND'
                     };
                     this.$socket.emit('sendMessage', jsonObject);
-                } else if (this.currentContactType === 'group') {
+                } else if (this.currentContact.type === 'group') {
                     jsonObject = {
                         account: window.localStorage.getItem("name"),
                         token: window.localStorage.getItem("token"),
-                        to: this.currentGroupId,
+                        to: this.currentContact.id,
                         text: text,
                         type: 'SEND'
                     };
                     this.$socket.emit('groupMessage', jsonObject);
                 }
-
-                this.infolist.push(jsonObject);
+                this.messageList.push(jsonObject);
             },
             switchContact:function (obj) {
-                this.currentContact = obj.name;
-                this.infolist = [];
+                this.currentContact = obj;
+                this.messageList = [];
             }
         }
     }
@@ -108,8 +93,9 @@
     .title {
         padding: 10px;
         text-align: center;
-        background: #dcdcdc;
+        background: #697489;
         height: 40px;
+        color: #fff;
     }
     .board,.board-list,.board-right{
         height: 600px;

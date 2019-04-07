@@ -3,7 +3,7 @@
         <Card :padding=5 :bordered=false class="contact-item" >
             <Avatar v-if="item.hasOwnProperty('_id')" shape="square" icon="ios-chatbubbles" />
             <Avatar v-else shape="square" icon="ios-person" />
-            <div style="display: inline;margin-left: 10px">{{item.name}}</div>
+            <div>{{item.name}}</div>
         </Card>
     </div>
 </template>
@@ -22,5 +22,9 @@
 <style scoped>
     .contact-item {
         margin-bottom: 5px;
+    }
+    .contact-item div {
+        display: inline;
+        margin-left: 10px;
     }
 </style>

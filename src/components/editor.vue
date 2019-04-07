@@ -1,9 +1,10 @@
 <template>
     <div>
-        <Split v-model="split3" >
+        <Split v-model="split" >
+            <!--<div slot="left" v-model="edit" contenteditable="true" style="min-height: 100px"></div>-->
             <Input  slot="left" v-model="edit"  type="textarea" :rows="4"  placeholder="Enter something..."/>
             <div slot="right">
-                <Button type="primary" style="float: right" @click="send()">Primary</Button>
+                <Button type="primary" style="float: right" @click="send">发送</Button>
             </div>
         </Split>
     </div>
@@ -11,18 +12,16 @@
 
 <script>
     export default {
-        name: "editer",
+        name: "editor",
         data () {
             return {
-                split3:0.92,
-                contactList: null,
+                split:0.92,
                 edit:null,
-                account: null,
             }
         },
         methods: {
             send: function () {
-                this.$emit('send', this.edit);
+                this.$emit('sendText', this.edit);
             }
         }
     }

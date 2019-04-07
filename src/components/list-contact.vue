@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="item in items" v-bind:key="item.name" @click="switchContact(item)">
+        <div v-for="item in items" v-bind:key="item.name" @click="switchContact(item)" >
             <ContactItem :item=item />
         </div>
     </div>
@@ -8,7 +8,7 @@
 
 <script>
     /* eslint-disable vue/require-valid-default-prop */
-    import ContactItem from './item-contact';
+    import ContactItem from './adapter/item-contact';
     export default {
         name: "list-contact",
         components:{ContactItem},

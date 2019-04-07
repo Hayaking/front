@@ -1,6 +1,6 @@
 <template>
     <Breadcrumb :style="{margin: '16px 0'}">
-        <BreadcrumbItem v-for="item in items" v-bind:key="item">{{item}}</BreadcrumbItem>
+        <BreadcrumbItem v-for="item in items" v-bind:key="item.hash">{{item}}</BreadcrumbItem>
     </Breadcrumb>
 </template>
 

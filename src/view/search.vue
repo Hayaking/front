@@ -11,7 +11,8 @@
             return{
                 user : null
             }
-        }, mounted(){
+        },
+        mounted(){
             this.user = this.$route.query.user
         },
     }

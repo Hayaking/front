@@ -7,7 +7,7 @@
                 <br/>
                 <Input v-model="password" prefix="ios-alert" placeholder="Enter name" style="width: 200px" />
                 <br/>
-                <Radio v-model="single" style="margin-right: 90px" v-show="isShow">记住密码</Radio>
+                <Radio v-model="isRemember" style="margin-right: 90px" v-show="isShow">记住密码</Radio>
                 <a @click="toSign">{{sign}}</a>
                 <br/>
                 <Button type="primary"  style="width: 200px" @click="send">{{title}}</Button>
@@ -26,6 +26,7 @@
                 title: "登录",
                 sign: "注册",
                 isShow: true,//标识登录与注册的切换状态
+                isRemember: false
             };
         },
         sockets: {
