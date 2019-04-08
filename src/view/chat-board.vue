@@ -8,7 +8,7 @@
                         <ContactList :items=contactList @switchContact="switchContact"/>
                     </div>
                     <div slot="right" class="board-right">
-                        <div class="title">{{currentContact.name}}</div>
+                        <TitleBar :current-name="currentContact.name"/>
                         <Split v-model="split2" mode="vertical" max="150px">
                             <div slot="top" class="board-info" >
                                 <MessageList :items=messageList />
@@ -27,12 +27,13 @@
 
 <script>
     import axios from 'axios';
-    import BreadGroup from './breadcrumbGroup';
-    import ContactList from './list-contact';
-    import MessageEditor from './editor';
-    import MessageList from './list-info';
+    import BreadGroup from '../components/breadcrumbGroup';
+    import ContactList from '../components/list-contact';
+    import MessageEditor from '../components/editor';
+    import MessageList from '../components/list-info';
+    import TitleBar from '../components/title-bar';
     export default {
-        components: {BreadGroup,ContactList, MessageEditor,MessageList},
+        components: {BreadGroup,ContactList, MessageEditor,MessageList,TitleBar},
 
         data () {
             return {
@@ -41,15 +42,15 @@
                 contactList: null,
                 messageList:[],
                 currentContact: {}, // name,type,id
-                bread: ["haya", "haya"]
+                bread: ["功能", "聊天"]
             }
         },
         mounted () {
             axios.get('http://localhost:8081/contacts', {
-                    params: {
-                        token: window.localStorage.getItem("token"),
-                        name: window.localStorage.getItem('name')
-                    }
+                params: {
+                    token: window.localStorage.getItem("token"),
+                    name: window.localStorage.getItem('name')
+                }
             }).then(response => (this.contactList = response.data.contacts));
         },
         sockets: {
@@ -90,13 +91,7 @@
 </script>
 
 <style scoped>
-    .title {
-        padding: 10px;
-        text-align: center;
-        background: #697489;
-        height: 40px;
-        color: #fff;
-    }
+
     .board,.board-list,.board-right{
         height: 600px;
     }

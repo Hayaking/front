@@ -8,7 +8,7 @@
                 </template>
                 <MenuItem name="1-1" to="/index">聊天界面</MenuItem>
                 <MenuItem name="1-2" to="/circle">朋友圈</MenuItem>
-                <MenuItem name="1-3">Option 3</MenuItem>
+                <MenuItem name="1-3" to="/search">搜索</MenuItem>
             </Submenu>
             <Submenu name="2">
                 <template slot="title">

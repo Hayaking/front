@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-for="item in items" v-bind:key="item.name" @click="switchContact(item)" >
-            <ContactItem :item=item />
+            <ContactItem :item=item  :currentName="currentName"/>
         </div>
     </div>
 </template>
@@ -12,6 +12,11 @@
     export default {
         name: "list-contact",
         components:{ContactItem},
+        data() {
+            return{
+                currentName:null
+            }
+        },
         props: {
             items: {
                 type:Array,
@@ -34,6 +39,7 @@
                         name: item.name
                     }
                 }
+                this.currentName = item.name;
                 this.$emit('switchContact', obj);
             }
         }

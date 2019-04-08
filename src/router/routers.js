@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import login from '../view/login'
 import _404 from '../view/404'
-import chat from '../components/chat-board'
+import chat from '../view/chat-board'
 import search from '../view/search'
 import circle from '../view/circle'
 Vue.use(Router);

@@ -42,7 +42,6 @@
                     window.localStorage.setItem('password', this.$md5(this.password));
                     this.$Message.success('登录成功');
                     //router跳转到 /index
-                    // this.$store.dispatch('show_sider');
                     this.$emit('login', true);
                     this.$router.push("/index");
                 } else if (obj.type === 'SIGN_SUCCESS') {
@@ -60,7 +59,7 @@
         methods:{
             send:function () {
                 //创建一个json对象
-                let jsonObject = {
+                let user = {
                     //账户名
                     account: this.account,
                     //记过md5加密后的密码
@@ -68,9 +67,9 @@
                 };
                 if (this.isShow) {
                     //发送消息 loginMessage 消息体是刚刚创建的json对象
-                    this.$socket.emit('loginMessage', jsonObject);
+                    this.$socket.emit('loginMessage', user);
                 } else {
-                    this.$socket.emit('signMessage', jsonObject);
+                    this.$socket.emit('signMessage', user);
                 }
 
             },

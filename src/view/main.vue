@@ -3,7 +3,7 @@
         <Sider theme="dark" v-if="isShow"/>
         <Layout class="layout">
             <Header class="header">
-                <Input search placeholder="搜索用户" style="width:50%"  @on-search="searchContact"/>
+                <Input v-model="searchName" search placeholder="搜索用户" style="width:50%"  @on-search="searchContact"/>
                 <div class="demo-avatar-badge" style="float: right">
                     <Dropdown @on-click="logoff">
                         <Badge :count="1" :offset=[45,5]>
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+    /* eslint-disable no-unused-vars */
+
     import Sider from '../components/sider';
     import axios from 'axios';
     import Login from './login';
@@ -35,7 +37,8 @@
         components: {Sider,Login},
         data() {
             return{
-                show: false
+                show: false,
+                searchName: null
             };
         },
         mounted(){
@@ -64,12 +67,13 @@
                 axios.get('http://localhost:8081/search', {
                     params: {
                         token: window.localStorage.getItem("token"),
-                        name: window.localStorage.getItem('name')
+                        name: window.localStorage.getItem('name'),
+                        search: this.searchName
                     }
                 }).then(response => (this.$router.push({
-                    path:"/search",
+                    path:"/search?search="+this.searchName,
                     query:{
-                        user:response.data
+                        user: response.data
                     }
                 })));
                 // axios.get('http://localhost:8081/search', {

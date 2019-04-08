@@ -15,13 +15,22 @@
         name: "editor",
         data () {
             return {
-                split:0.92,
+                split:0.93,
                 edit:null,
             }
         },
         methods: {
             send: function () {
-                this.$emit('sendText', this.edit);
+                if (this.edit.trim() === '') {
+                    this.$Message.error('发送消息不得为空或空格');
+                } else {
+                    this.$emit('sendText', this.edit);
+
+                }
+                this.clear();
+            },
+            clear: function () {
+                this.edit = '';
             }
         }
     }
